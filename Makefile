@@ -1,7 +1,7 @@
 NAME=libasm
 LIB=libasm.a
 ASSEMBLER=nasm -f elf64
-SRCS=./srcs/ft_strlen.s ./srcs/ft_strcpy.s
+SRCS=./srcs/ft_strlen.s ./srcs/ft_strcpy.s ./srcs/ft_strcmp.s
 OBJS=${SRCS:.s=.o}
 COMPILER=gcc
 MAIN=./srcs/main.c
