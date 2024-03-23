@@ -1,6 +1,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <errno.h>
 #include <fcntl.h>
 #define RED "\033[31m"
@@ -23,6 +24,7 @@ extern char		*ft_strcpy(char *dest, char *str);
 extern int		ft_strcmp(char *s1, char *s2); 
 extern ssize_t	ft_write(int fd, const void *buf, size_t count);
 extern ssize_t	ft_read(int fd, const void *buf, size_t count);
+extern char		*ft_strdup(const char *s);
 
 
 void	print_color(char *str, char *clr)
@@ -121,8 +123,23 @@ void	test_ft_read(void)
 	print_color("Test 2: fd->-1", CYAN_BOLD);
 	ret = read(-1, s, len);
 	printf("\tread() ret: %ld\n\tread() ERRNO: %d\n", ret, errno);
-	ret = ft_read(-1,ft_s, len);
+	ret = ft_read(-1, ft_s, len);
 	printf("\tft_read() ret: %ld\n\tft_read() ERRNO: %d\n", ret, errno);
+}
+
+void	test_ft_strdup(void)
+{
+	const char *s = "Hello World";
+	char *dest;
+	char *ft_dest;
+
+	print_color("Test 1: \"Hello World\"", CYAN_BOLD);
+	dest = strdup(s);
+	printf("\tstrdup() -> dest: %s\n", dest);
+	ft_dest = ft_strdup(s);
+	printf("\tft_strdup() -> ft_dest: %s\n", ft_dest);
+	free(dest);
+	free(ft_dest);
 }
 
 int		main(void)
@@ -137,5 +154,7 @@ int		main(void)
 	test_ft_write();
 	print_color("\n------------TEST READ------------", GREEN_BOLD);
 	test_ft_read();
+	print_color("\n-----------TEST STRDUP-----------", GREEN_BOLD);
+	test_ft_strdup();
 	return 0;
 }
