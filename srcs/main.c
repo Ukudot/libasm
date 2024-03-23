@@ -33,6 +33,7 @@ extern ssize_t	ft_write(int fd, const void *buf, size_t count);
 extern ssize_t	ft_read(int fd, const void *buf, size_t count);
 extern char		*ft_strdup(const char *s);
 extern void		ft_list_push_front(t_list **begin, void *data);
+extern int		ft_list_size(t_list *begin_list);
 
 
 t_list	*create_new_node(void *data) {
@@ -187,7 +188,41 @@ void	test_ft_list_push_front(void)
 	elem = head;
 	for (;elem; elem = elem->next)
 		printf("\tDATA: %d\n", *((int *) elem->data));
+	
+	printf("\tLENGTH: %d\n", ft_list_size(head));
+	elem = head;
+	for (; head;) {
+		elem = head->next;
+		free(head);
+		head = elem;
+	}
+}
 
+void	test_ft_list_size(void)
+{
+	t_list	*head;
+	t_list	*elem;
+	int		n[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+
+	print_color("Test 1: pushing the following array -> {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}", CYAN_BOLD);
+	head = NULL;
+	for (int i = 0; i < 10; i++)
+		push_front(&head, (void *) &n[i]);
+	
+	printf("\tLENGTH: %d\n", ft_list_size(head));
+	elem = head;
+	for (; head;) {
+		elem = head->next;
+		free(head);
+		head = elem;
+	}
+
+	print_color("Test 1: pushing the following array -> {1, 2, 3, 4, 5}", CYAN_BOLD);
+	head = NULL;
+	for (int i = 0; i < 5; i++)
+		push_front(&head, (void *) &n[i]);
+	
+	printf("\tLENGTH: %d\n", ft_list_size(head));
 	elem = head;
 	for (; head;) {
 		elem = head->next;
@@ -212,5 +247,8 @@ int		main(void)
 	test_ft_strdup();
 	print_color("\n---------TEST PUSH_FRONT---------", GREEN_BOLD);
 	test_ft_list_push_front();
+	print_color("\n---------TEST LIST_SIZE----------", GREEN_BOLD);
+	test_ft_list_size();
+
 	return 0;
 }
