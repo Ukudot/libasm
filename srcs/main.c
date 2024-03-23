@@ -19,13 +19,44 @@
 #define CYAN_BOLD "\033[36;1m"
 #define WHITE_BOLD "\033[37;1m"
 
+
+typedef	struct s_list
+{
+	void			*data;
+	struct s_list	*next;
+}	t_list;
+
 extern size_t	ft_strlen(char *str); 
 extern char		*ft_strcpy(char *dest, char *str); 
 extern int		ft_strcmp(char *s1, char *s2); 
 extern ssize_t	ft_write(int fd, const void *buf, size_t count);
 extern ssize_t	ft_read(int fd, const void *buf, size_t count);
 extern char		*ft_strdup(const char *s);
+extern void		ft_list_push_front(t_list **begin, void *data);
 
+
+t_list	*create_new_node(void *data) {
+	t_list	*new_node;
+
+	new_node = (t_list *) malloc(sizeof(t_list));
+	if (!new_node)
+		return NULL;
+	new_node->data = data;
+	new_node->next = NULL;
+	return new_node;
+}
+
+void	push_front(t_list **head, void *data) {
+	t_list	*new_node;
+
+	if (!head)
+		return;
+	new_node = create_new_node(data);
+	if (!new_node)
+		return;
+	new_node->next = *head;
+	*head = new_node;
+}
 
 void	print_color(char *str, char *clr)
 {
@@ -142,6 +173,29 @@ void	test_ft_strdup(void)
 	free(ft_dest);
 }
 
+void	test_ft_list_push_front(void)
+{
+	t_list	*head;
+	t_list	*elem;
+	int		n[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+
+	print_color("Test 1: pushing the following array -> {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}", CYAN_BOLD);
+	head = NULL;
+	for (int i = 0; i < 10; i++)
+		push_front(&head, (void *) &n[i]);
+
+	elem = head;
+	for (;elem; elem = elem->next)
+		printf("\tDATA: %d\n", *((int *) elem->data));
+
+	elem = head;
+	for (; head;) {
+		elem = head->next;
+		free(head);
+		head = elem;
+	}
+}
+
 int		main(void)
 {
 	print_color("\n-----------TEST STRLEN-----------", GREEN_BOLD);
@@ -156,5 +210,7 @@ int		main(void)
 	test_ft_read();
 	print_color("\n-----------TEST STRDUP-----------", GREEN_BOLD);
 	test_ft_strdup();
+	print_color("\n---------TEST PUSH_FRONT---------", GREEN_BOLD);
+	test_ft_list_push_front();
 	return 0;
 }
