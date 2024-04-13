@@ -34,7 +34,11 @@ extern ssize_t	ft_read(int fd, const void *buf, size_t count);
 extern char		*ft_strdup(const char *s);
 extern void		ft_list_push_front(t_list **begin, void *data);
 extern int		ft_list_size(t_list *begin_list);
+extern void		ft_list_sort(t_list **begin, int (*cmp)());
 
+int				ft_intcmp(int *a, int *b) {
+	return (*a - *b);
+}
 
 t_list	*create_new_node(void *data) {
 	t_list	*new_node;
@@ -231,6 +235,191 @@ void	test_ft_list_size(void)
 	}
 }
 
+void	test_ft_list_sort(void)
+{
+	t_list	*head;
+	t_list	*elem;
+	int		n[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+	int		n2[10] = {4, 2, 7, 10, 9, 4, 1, 8, 4, 3};
+	int		n3[10] = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
+	int		n4[10] = {2, 4, 2, 4, 2, 4, 2, 4, 2, 4};
+
+	print_color("Test 1: sorting list -> {10, 9, 8, 7, 6, 5, 4, 3, 2, 1}", CYAN_BOLD);
+	head = NULL;
+	for (int i = 0; i < 10; i++)
+		push_front(&head, (void *) &n[i]);
+	
+	printf("\tBefore sorting: ");
+	elem = head;
+	for (; elem; elem = elem->next) {
+		printf(" %d", *(int *) elem->data);
+	}
+	printf("\n");
+
+	ft_list_sort(&head, &ft_intcmp);
+
+	printf("\tAfter sorting: ");
+	elem = head;
+	for (; head;) {
+		printf(" %d", *(int *) elem->data);
+		elem = head->next;
+		free(head);
+		head = elem;
+	}
+	printf("\n");
+
+	print_color("Test 2: sorting list -> {5, 4, 3, 2, 1}", CYAN_BOLD);
+	head = NULL;
+	for (int i = 0; i < 5; i++)
+		push_front(&head, (void *) &n[i]);
+	
+	printf("\tBefore sorting: ");
+	elem = head;
+	for (; elem; elem = elem->next) {
+		printf(" %d", *(int *) elem->data);
+	}
+	printf("\n");
+
+	ft_list_sort(&head, &ft_intcmp);
+	elem = head;
+
+	printf("\tAfter sorting: ");
+	for (; head;) {
+		printf(" %d", *(int *) elem->data);
+		elem = head->next;
+		free(head);
+		head = elem;
+	}
+	printf("\n");
+
+	print_color("Test 3: sorting list -> {4, 2, 7, 10, 9, 4, 1, 8, 4, 3}", CYAN_BOLD);
+	head = NULL;
+	for (int i = 0; i < 10; i++)
+		push_front(&head, (void *) &n2[i]);
+	
+	printf("\tBefore sorting: ");
+	elem = head;
+	for (; elem; elem = elem->next) {
+		printf(" %d", *(int *) elem->data);
+	}
+	printf("\n");
+
+	ft_list_sort(&head, &ft_intcmp);
+	elem = head;
+
+	printf("\tAfter sorting: ");
+	for (; head;) {
+		printf(" %d", *(int *) elem->data);
+		elem = head->next;
+		free(head);
+		head = elem;
+	}
+	printf("\n");
+
+	print_color("Test 4: sorting list -> NULL", CYAN_BOLD);
+	ft_list_sort(NULL, &ft_intcmp);
+
+	print_color("Test 5: sorting list -> {}", CYAN_BOLD);
+	head = NULL;
+	ft_list_sort(&head, &ft_intcmp);
+
+	print_color("Test 6: sorting list -> {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}", CYAN_BOLD);
+	head = NULL;
+	for (int i = 0; i < 10; i++)
+		push_front(&head, (void *) &n3[i]);
+	
+	printf("\tBefore sorting: ");
+	elem = head;
+	for (; elem; elem = elem->next) {
+		printf(" %d", *(int *) elem->data);
+	}
+	printf("\n");
+
+	ft_list_sort(&head, &ft_intcmp);
+
+	printf("\tAfter sorting: ");
+	elem = head;
+	for (; head;) {
+		printf(" %d", *(int *) elem->data);
+		elem = head->next;
+		free(head);
+		head = elem;
+	}
+	printf("\n");
+
+	print_color("Test 7: sorting list -> {4, 2, 4, 2, 4, 2, 4, 2, 4, 2}", CYAN_BOLD);
+	head = NULL;
+	for (int i = 0; i < 10; i++)
+		push_front(&head, (void *) &n4[i]);
+	
+	printf("\tBefore sorting: ");
+	elem = head;
+	for (; elem; elem = elem->next) {
+		printf(" %d", *(int *) elem->data);
+	}
+	printf("\n");
+
+	ft_list_sort(&head, &ft_intcmp);
+
+	printf("\tAfter sorting: ");
+	elem = head;
+	for (; head;) {
+		printf(" %d", *(int *) elem->data);
+		elem = head->next;
+		free(head);
+		head = elem;
+	}
+	printf("\n");
+
+	print_color("Test 8: sorting list -> {4, 2}", CYAN_BOLD);
+	head = NULL;
+	for (int i = 0; i < 2; i++)
+		push_front(&head, (void *) &n4[i]);
+	
+	printf("\tBefore sorting: ");
+	elem = head;
+	for (; elem; elem = elem->next) {
+		printf(" %d", *(int *) elem->data);
+	}
+	printf("\n");
+
+	ft_list_sort(&head, &ft_intcmp);
+
+	printf("\tAfter sorting: ");
+	elem = head;
+	for (; head;) {
+		printf(" %d", *(int *) elem->data);
+		elem = head->next;
+		free(head);
+		head = elem;
+	}
+	printf("\n");
+
+	print_color("Test 9: sorting list -> {4}", CYAN_BOLD);
+	head = NULL;
+	for (int i = 0; i < 1; i++)
+		push_front(&head, (void *) &n4[i]);
+	
+	printf("\tBefore sorting: ");
+	elem = head;
+	for (; elem; elem = elem->next) {
+		printf(" %d", *(int *) elem->data);
+	}
+	printf("\n");
+
+	ft_list_sort(&head, &ft_intcmp);
+
+	printf("\tAfter sorting: ");
+	elem = head;
+	for (; head;) {
+		printf(" %d", *(int *) elem->data);
+		elem = head->next;
+		free(head);
+		head = elem;
+	}
+	printf("\n");
+}
+
 int		main(void)
 {
 	print_color("\n-----------TEST STRLEN-----------", GREEN_BOLD);
@@ -249,6 +438,8 @@ int		main(void)
 	test_ft_list_push_front();
 	print_color("\n---------TEST LIST_SIZE----------", GREEN_BOLD);
 	test_ft_list_size();
+	print_color("\n---------TEST LIST_SORT----------", GREEN_BOLD);
+	test_ft_list_sort();
 
 	return 0;
 }

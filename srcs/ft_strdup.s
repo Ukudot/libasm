@@ -15,6 +15,7 @@ __ft_strlen:
 	call ft_strlen ; take the length of the string
 
 __malloc:
+	add rax, 1 ; add null byte space
 	mov rdi, rax ; save the length in rdi in order to prepare the call to malloc
 	call malloc wrt ..plt ; call malloc function
 	cmp rax, 0 ; check if rax is a NULL pointer
