@@ -35,9 +35,15 @@ extern char		*ft_strdup(const char *s);
 extern void		ft_list_push_front(t_list **begin, void *data);
 extern int		ft_list_size(t_list *begin_list);
 extern void		ft_list_sort(t_list **begin, int (*cmp)());
+extern void		ft_list_remove_if(t_list **begin_list, void *data_ref, int(*cmp)(), void (*free_fct)(void *));
 
-int				ft_intcmp(int *a, int *b) {
+
+int		ft_intcmp(int *a, int *b) {
 	return (*a - *b);
+}
+
+void	my_free_fct(void *data) {
+	printf(" data \"%d\" will be deleted\n", *(int *) data);
 }
 
 t_list	*create_new_node(void *data) {
@@ -292,7 +298,7 @@ void	test_ft_list_sort(void)
 	}
 	printf("\n");
 
-	print_color("Test 3: sorting list -> {4, 2, 7, 10, 9, 4, 1, 8, 4, 3}", CYAN_BOLD);
+	print_color("Test 3: sorting list -> {3, 4, 8, 1, 4, 9, 10, 7, 2, 4}", CYAN_BOLD);
 	head = NULL;
 	for (int i = 0; i < 10; i++)
 		push_front(&head, (void *) &n2[i]);
@@ -395,7 +401,7 @@ void	test_ft_list_sort(void)
 	}
 	printf("\n");
 
-	print_color("Test 9: sorting list -> {4}", CYAN_BOLD);
+	print_color("Test 9: sorting list -> {2}", CYAN_BOLD);
 	head = NULL;
 	for (int i = 0; i < 1; i++)
 		push_front(&head, (void *) &n4[i]);
@@ -410,6 +416,172 @@ void	test_ft_list_sort(void)
 	ft_list_sort(&head, &ft_intcmp);
 
 	printf("\tAfter sorting: ");
+	elem = head;
+	for (; head;) {
+		printf(" %d", *(int *) elem->data);
+		elem = head->next;
+		free(head);
+		head = elem;
+	}
+	printf("\n");
+}
+
+void	test_ft_list_remove_if(void)
+{
+	t_list	*head;
+	t_list	*elem;
+	int		data_ref = 4;
+	int		n[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+	int		n2[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 4};
+	int		n3[10] = {4, 2, 7, 10, 9, 4, 1, 8, 4, 3};
+	int		n4[10] = {4, 4, 4, 4, 4, 4, 4, 4, 4, 2};
+	int		n5[10] = {4, 4, 4, 4, 2, 4, 4, 4, 4, 4};
+	int		n6[10] = {4, 4, 4, 4, 4, 4, 4, 4, 4, 4};
+
+	print_color("Test 1: list -> NULL", CYAN_BOLD);
+	ft_list_remove_if(NULL, (void *) &data_ref, &ft_intcmp, &my_free_fct);
+
+	print_color("Test 2: list -> {}", CYAN_BOLD);
+	head = NULL;
+	ft_list_remove_if(&head, (void *) &data_ref, &ft_intcmp, &my_free_fct);
+
+
+	print_color("Test 3: list -> {10, 9, 8, 7, 6, 5, 4, 3, 2, 1}, data_ref -> 4", CYAN_BOLD);
+	head = NULL;
+	for (int i = 0; i < 10; i++)
+		push_front(&head, (void *) &n[i]);
+	
+	printf("\tBefore removing: ");
+	elem = head;
+	for (; elem; elem = elem->next) {
+		printf(" %d", *(int *) elem->data);
+	}
+	printf("\n");
+
+	ft_list_remove_if(&head, (void *) &data_ref, &ft_intcmp, &my_free_fct);
+
+	printf("\tAfter removing: ");
+	elem = head;
+	for (; head;) {
+		printf(" %d", *(int *) elem->data);
+		elem = head->next;
+		free(head);
+		head = elem;
+	}
+	printf("\n");
+
+	print_color("Test 4: list -> {4, 9, 8, 7, 6, 5, 4, 3, 2, 1}, data_ref -> 4", CYAN_BOLD);
+	head = NULL;
+	for (int i = 0; i < 10; i++)
+		push_front(&head, (void *) &n2[i]);
+	
+	printf("\tBefore removing: ");
+	elem = head;
+	for (; elem; elem = elem->next) {
+		printf(" %d", *(int *) elem->data);
+	}
+	printf("\n");
+
+	ft_list_remove_if(&head, (void *) &data_ref, &ft_intcmp, &my_free_fct);
+
+	printf("\tAfter removing: ");
+	elem = head;
+	for (; head;) {
+		printf(" %d", *(int *) elem->data);
+		elem = head->next;
+		free(head);
+		head = elem;
+	}
+	printf("\n");
+
+
+	print_color("Test 5: list -> {3, 4, 8, 1, 4, 9, 10, 7, 2, 4}, data_ref -> 4", CYAN_BOLD);
+	head = NULL;
+	for (int i = 0; i < 10; i++)
+		push_front(&head, (void *) &n3[i]);
+	
+	printf("\tBefore removing: ");
+	elem = head;
+	for (; elem; elem = elem->next) {
+		printf(" %d", *(int *) elem->data);
+	}
+	printf("\n");
+
+	ft_list_remove_if(&head, (void *) &data_ref, &ft_intcmp, &my_free_fct);
+
+	printf("\tAfter removing: ");
+	elem = head;
+	for (; head;) {
+		printf(" %d", *(int *) elem->data);
+		elem = head->next;
+		free(head);
+		head = elem;
+	}
+	printf("\n");
+
+	print_color("Test 6: list -> {2, 4, 4, 4, 4, 4, 4, 4, 4, 4}, data_ref -> 4", CYAN_BOLD);
+	head = NULL;
+	for (int i = 0; i < 10; i++)
+		push_front(&head, (void *) &n4[i]);
+	
+	printf("\tBefore removing: ");
+	elem = head;
+	for (; elem; elem = elem->next) {
+		printf(" %d", *(int *) elem->data);
+	}
+	printf("\n");
+
+	ft_list_remove_if(&head, (void *) &data_ref, &ft_intcmp, &my_free_fct);
+
+	printf("\tAfter removing: ");
+	elem = head;
+	for (; head;) {
+		printf(" %d", *(int *) elem->data);
+		elem = head->next;
+		free(head);
+		head = elem;
+	}
+	printf("\n");
+
+	print_color("Test 7: list -> {4, 4, 4, 4, 4, 2, 4, 4, 4, 4}, data_ref -> 4", CYAN_BOLD);
+	head = NULL;
+	for (int i = 0; i < 10; i++)
+		push_front(&head, (void *) &n5[i]);
+	
+	printf("\tBefore removing: ");
+	elem = head;
+	for (; elem; elem = elem->next) {
+		printf(" %d", *(int *) elem->data);
+	}
+	printf("\n");
+
+	ft_list_remove_if(&head, (void *) &data_ref, &ft_intcmp, &my_free_fct);
+
+	printf("\tAfter removing: ");
+	elem = head;
+	for (; head;) {
+		printf(" %d", *(int *) elem->data);
+		elem = head->next;
+		free(head);
+		head = elem;
+	}
+	printf("\n");
+
+	print_color("Test 8: list -> {4, 4, 4, 4, 4, 4, 4, 4, 4, 4}, data_ref -> 4", CYAN_BOLD);
+	head = NULL;
+	for (int i = 0; i < 10; i++)
+		push_front(&head, (void *) &n6[i]);
+	
+	printf("\tBefore removing: ");
+	elem = head;
+	for (; elem; elem = elem->next) {
+		printf(" %d", *(int *) elem->data);
+	}
+	printf("\n");
+
+	ft_list_remove_if(&head, (void *) &data_ref, &ft_intcmp, &my_free_fct);
+
+	printf("\tAfter removing: ");
 	elem = head;
 	for (; head;) {
 		printf(" %d", *(int *) elem->data);
@@ -440,6 +612,8 @@ int		main(void)
 	test_ft_list_size();
 	print_color("\n---------TEST LIST_SORT----------", GREEN_BOLD);
 	test_ft_list_sort();
+	print_color("\n-------TEST LIST_REMOVE_IF-------", GREEN_BOLD);
+	test_ft_list_remove_if();
 
 	return 0;
 }

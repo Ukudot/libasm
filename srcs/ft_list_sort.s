@@ -48,8 +48,7 @@ extern ft_list_size
 ; r9 is the counter of the loop
 ; r10 is the current swapping node address
 ; r11 is the next swapping node address
-; r12 is the header pointer address
-; r13 is the previous node
+; r12 is the previous node address
 ; r15 is the compare function address
 
 ; void ft_list_sort(t_list **begin_list, int (*cmp)())
@@ -99,15 +98,15 @@ _swap:
 	jmp _update_previous_loop
 
 _update_header_loop:
-	mov [rbx], r11
+	mov [rbx], r11 ; update header
 	jmp _inverse_update_loop
 
 _update_previous_loop:
-	mov [r12 + 8], r11
+	mov [r12 + 8], r11 ; update r12 next field
 
 _inverse_update_loop:
-	mov r12, r11
-	mov r11, [r10 + 8]
+	mov r12, r11 ; update the position of previous header
+	mov r11, [r10 + 8] ; update the position of next header
 
 _end_loop:
 	cmp qword r11, 0 ; if the list reached the end
