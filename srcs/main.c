@@ -36,6 +36,14 @@ extern void		ft_list_push_front(t_list **begin, void *data);
 extern int		ft_list_size(t_list *begin_list);
 extern void		ft_list_sort(t_list **begin, int (*cmp)());
 extern void		ft_list_remove_if(t_list **begin_list, void *data_ref, int(*cmp)(), void (*free_fct)(void *));
+extern int		ft_check_dup(char *str);
+extern int		ft_check_in(char c, const char *set);
+extern int		ft_check_in_str(const char *str, const char *set);
+extern int		ft_isspace(char c);
+extern int		ft_issign(char c);
+extern int		ft_isnumber(char c);
+extern int		ft_convert_to_dec(char c, char *base);
+extern int		ft_atoi_base(char *str, char *base);
 
 
 int		ft_intcmp(int *a, int *b) {
@@ -182,6 +190,34 @@ void	test_ft_strdup(void)
 	printf("\tft_strdup() -> ft_dest: %s\n", ft_dest);
 	free(dest);
 	free(ft_dest);
+}
+
+void	test_atoi_base(void)
+{
+	print_color("Test 1: \"        +a0a-+ 0a01-+1++1011\" \"0ab\"", CYAN_BOLD);
+	printf("\tft_atoi_base(): %d\n", ft_atoi_base("        +a0a-+ 0a01-+1++1011", "0ab"));
+	print_color("Test 2: \"1101\" \"01\"", CYAN_BOLD);
+	printf("\tft_atoi_base(): %d\n", ft_atoi_base("1101", "01"));
+	print_color("Test 3: \"1101\" \"0 1\"", CYAN_BOLD);
+	printf("\tft_atoi_base(): %d\n", ft_atoi_base("1101", "0 1"));
+	print_color("Test 4: \"1101\" \"011\"", CYAN_BOLD);
+	printf("\tft_atoi_base(): %d\n", ft_atoi_base("1101", "011"));
+	print_color("Test 5: \"1101\" \"0+1\"", CYAN_BOLD);
+	printf("\tft_atoi_base(): %d\n", ft_atoi_base("1101", "0+1"));
+	print_color("Test 6: \"1101\" \"0-1\"", CYAN_BOLD);
+	printf("\tft_atoi_base(): %d\n", ft_atoi_base("1101", "0-1"));
+	print_color("Test 7: \"1101\" \"1\"", CYAN_BOLD);
+	printf("\tft_atoi_base(): %d\n", ft_atoi_base("1101", "1"));
+	print_color("Test 8: \"--+1101\" \"01\"", CYAN_BOLD);
+	printf("\tft_atoi_base(): %d\n", ft_atoi_base("--+1101", "01"));
+	print_color("Test 9: \"--+-1101\" \"01\"", CYAN_BOLD);
+	printf("\tft_atoi_base(): %d\n", ft_atoi_base("--+-1101", "01"));
+	print_color("Test 10: \"--+-1101\" \"\"", CYAN_BOLD);
+	printf("\tft_atoi_base(): %d\n", ft_atoi_base("--+-1101", ""));
+	print_color("Test 11: \"--+acbb\" \"abc\"", CYAN_BOLD);
+	printf("\tft_atoi_base(): %d\n", ft_atoi_base("--+acbb", "abc"));
+	print_color("Test 12: \"--+ad34\" \"0123456789abcdef\"", CYAN_BOLD);
+	printf("\tft_atoi_base(): %d\n", ft_atoi_base("--+ad34", "0123456789abcdef"));
 }
 
 void	test_ft_list_push_front(void)
@@ -606,6 +642,8 @@ int		main(void)
 	test_ft_read();
 	print_color("\n-----------TEST STRDUP-----------", GREEN_BOLD);
 	test_ft_strdup();
+	print_color("\n----------TEST ATOI_BASE---------", GREEN_BOLD);
+	test_atoi_base();
 	print_color("\n---------TEST PUSH_FRONT---------", GREEN_BOLD);
 	test_ft_list_push_front();
 	print_color("\n---------TEST LIST_SIZE----------", GREEN_BOLD);
