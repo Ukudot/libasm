@@ -1,4 +1,5 @@
 NAME=libasm
+BONUS_NAME=libasm_bonus
 LIB=libasm.a
 ASSEMBLER=nasm -f elf64
 SRCS=./srcs/ft_strlen.s ./srcs/ft_strcpy.s ./srcs/ft_strcmp.s ./srcs/ft_write.s ./srcs/ft_read.s ./srcs/ft_strdup.s
@@ -19,9 +20,9 @@ ${NAME}: ${OBJS}
 	ar rcs ${LIB} ${OBJS}
 	${COMPILER} ${FLAGS} ${MAIN} ${LIB} -o ${NAME}
 
-bonus: ${OBJS} ${BONUS_OBJS}
+${BONUS_NAME}: ${OBJS} ${BONUS_OBJS}
 	ar rcs ${LIB} ${OBJS} ${BONUS_OBJS}
-	${COMPILER} ${FLAGS} ${BONUS_MAIN} ${LIB} -o ${NAME}
+	${COMPILER} ${FLAGS} ${BONUS_MAIN} ${LIB} -o ${BONUS_NAME}
 
 all: ${NAME}
 
@@ -31,10 +32,13 @@ clean:
 
 fclean: clean
 	rm -rf ${NAME}
+	rm -rf ${BONUS_NAME}
 	rm -rf ${LIB}
 
 re: fclean all
 
+bonus: ${BONUS_NAME}
+
 
 .PHONY:
-	all clean fclean re
+	all clean fclean re bonus
